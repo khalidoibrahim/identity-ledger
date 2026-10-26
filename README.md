@@ -14,7 +14,7 @@ An Android app for building habits around who you want to become. Every day you 
 ## Features
 
 - **Today** – vote for each identity with a *minimum* version (small enough for your worst day) or the *full* version, see your 7-day dots, and get a "never miss twice" nudge after a miss
-- **Identity** – up to 3 active identities ("I am someone who trains, even on busy days"), each with one or two proof behaviors, a 30-day score and total votes
+- **Identity** – as many identities as you like ("I am someone who trains, even on busy days"), each with one or two proof behaviors, a 30-day score and total votes
 - **Notes** – daily prompts for thinking about who you want to be; pin the ones that matter or turn a note into an identity
 - **Ideas** – save lessons from books, podcasts, videos and people, link them to identities, and get one back on Today
 - **Review** – weekly numbers, a weekly reflection, and patterns in your misses (time of day, triggers, if-then plans)
