@@ -501,7 +501,6 @@ var TYPES = {
 var KEY_RE = /^(traits|reviews|notes|ideas|m-\d{4}-\d{2})$/;
 var LS_KEY = 'identity-ledger.v1';
 var LS_DRAFT = 'identity-ledger.notedraft';
-var MAX_ACTIVE = 3;
 
 var ICON_CHECK = '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4.5 10.5l3.5 3.5 7.5-8" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 var ICON_L = '<svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M11 3.5L5.5 9l5.5 5.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
@@ -1081,9 +1080,9 @@ function idCard(t){
 function renderIdentity(){
   var act = activeTraits(), arch = traits().filter(function(t){ return t.archived; });
   var html = '<h1 class="pagetitle">Identity</h1>' +
-    '<p class="lede">Up to 3 at a time. Each one is proven by a behavior small enough to do on your worst day.</p>' +
-    '<div class="row-between"><div class="eyebrow">Active · ' + act.length + ' of ' + MAX_ACTIVE + '</div>' +
-    (act.length < MAX_ACTIVE ? '<button class="btn sm primary" data-act="newTrait">Add identity</button>' : '<span class="note">Archive one to add another.</span>') + '</div>';
+    '<p class="lede">Add as many as you like. Each one is proven by a behavior small enough to do on your worst day.</p>' +
+    '<div class="row-between"><div class="eyebrow">Active · ' + act.length + '</div>' +
+    '<button class="btn sm primary" data-act="newTrait">Add identity</button></div>';
   if (!act.length){
     html += '<section class="card"><p>No active identities yet. Add one, or start from a template.</p><div class="chips">' + templateChips('tpl') + '</div></section>';
   }
@@ -1510,7 +1509,6 @@ function openTraitSheet(tid, tplIndex, fromNote){
     t = clone(found);
     t.color = colorOf(found);
   } else {
-    if (activeTraits().length >= MAX_ACTIVE){ toast('You have 3 active identities. Archive one first.'); return; }
     t = {id:uid(), statement:'', why:'', color:nextColor(), createdAt:todayStr(), archived:false, behaviors:[{id:uid(), name:'', min:'', full:''}]};
   }
   sheetState = {type:'trait', t:t, isNew:!tid, fromNote:fromNote || ''};
@@ -1562,7 +1560,6 @@ function saveTrait(){
   var msg = '';
   if (!t.statement) msg = 'Finish the sentence “I am someone who…”.';
   else if (t.behaviors.some(function(b){ return !b.name || !b.min || !b.full; })) msg = 'Give each behavior a name, a minimum and a full version.';
-  else if (isNew && activeTraits().length >= MAX_ACTIVE) msg = 'You already have 3 active identities. Archive one first.';
   if (msg){ err.textContent = msg; err.hidden = false; return; }
   var list = S.docs.traits.traits, i = -1;
   list.forEach(function(x, j){ if (x.id === t.id) i = j; });
@@ -1580,7 +1577,6 @@ function archiveTrait(el){
   closeSheet(); render(); toast('Archived. Its votes are kept.');
 }
 function restoreTrait(id){
-  if (activeTraits().length >= MAX_ACTIVE){ toast('Archive another identity first. 3 is the limit.'); return; }
   traits().forEach(function(x){ if (x.id === id) x.archived = false; });
   save('traits'); render(); toast('Restored');
 }
@@ -1630,7 +1626,6 @@ function deleteNote(el){
   save('notes'); closeSheet(); render(); toast('Note deleted');
 }
 function noteToIdentity(){
-  if (activeTraits().length >= MAX_ACTIVE){ toast('You have 3 active identities. Archive one first.'); return; }
   var text = String(sheetState.n.text).trim();
   if (text) commitNote();
   closeSheet(); render();
